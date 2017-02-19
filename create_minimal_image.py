@@ -1,8 +1,6 @@
 import subprocess
 import sys
 
-INVOCATION_COUNT = 0
-
 
 def ldd_of_shared_object(shared_objects, executable):
     std_out = run_bash_command(["ldd", str(executable).strip()])
@@ -11,14 +9,14 @@ def ldd_of_shared_object(shared_objects, executable):
 
 def std_out_to_shared_objects(shared_objects, std_out):
     for std_out_line in convert_std_out_to_list(std_out):
-        line_list = std_out_line.split(" ")
-        find_dependencies(shared_objects, line_list)
+        find_dependencies(shared_objects, std_out_line)
     return shared_objects
 
 
-def find_dependencies(shared_objects, line_list):
-    shared_object_name = line_list[0]
-    if shared_object_name not in shared_objects:
+def find_dependencies(shared_objects, std_out_line):
+    line_list = std_out_line.split(" ")
+    shared_object_name = line_list[0].strip()
+    if shared_object_name not in shared_objects.keys():
         if len(line_list) > 3 and line_list[2] not in ('', 'not'):
             shared_objects[shared_object_name] = line_list[2]
         if len(line_list) == 2 and shared_object_name not in ['statically']:
@@ -43,16 +41,14 @@ def main(directory):
 
 
 def run_bash_command(command):
-    global INVOCATION_COUNT
     popen = subprocess.Popen(command, stdout=subprocess.PIPE)
     std_out, std_err = popen.communicate("")
-    write_file(std_out)
-    INVOCATION_COUNT += 1
+    write_file(command, std_out)
     return std_out
 
 
-def write_file(std_out):
-    with open("tests/fixtures/output_{0}.txt".format(INVOCATION_COUNT), 'w') as f:
+def write_file(command, std_out):
+    with open("tests/fixtures/{0}.txt".format("_".join(command).replace("/", "_")), 'w') as f:
         f.write(std_out)
 
 

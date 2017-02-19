@@ -1,0 +1,4 @@
+	linux-vdso.so.1 =>  (0x00007ffc04d1e000)
+	libpthread.so.0 => /lib64/libpthread.so.0 (0x00007fe77cb49000)
+	libc.so.6 => /lib64/libc.so.6 (0x00007fe77c788000)
+	/lib64/ld-linux-x86-64.so.2 (0x000055c6c14ab000)

@@ -1,0 +1,7 @@
+	linux-vdso.so.1 =>  (0x00007ffd5c7cd000)
+	libnspr4.so => /lib64/libnspr4.so (0x00007fefab685000)
+	libc.so.6 => /lib64/libc.so.6 (0x00007fefab2c4000)
+	libpthread.so.0 => /lib64/libpthread.so.0 (0x00007fefab0a7000)
+	libdl.so.2 => /lib64/libdl.so.2 (0x00007fefaaea3000)
+	librt.so.1 => /lib64/librt.so.1 (0x00007fefaac9b000)
+	/lib64/ld-linux-x86-64.so.2 (0x000055b0ea2c8000)
