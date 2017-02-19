@@ -11,6 +11,12 @@ are decreased.
 
     docker run -v "${PWD}:/data" -w /data centos:java1.8.0_121 python create_minimal_image.py
 
+# Running tests
+
+    # create virtualenv if you'd like
+    pip install -r requirements.txt
+    pytest
+
 # TODOS
 
 [ ]: copy files found by command above into `build-output/` to be used by a subsequent Docker image
