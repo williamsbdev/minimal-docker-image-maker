@@ -4,13 +4,22 @@ import sys
 
 def main(directory):
     find_command = ['find', directory, '-type', 'f', '-perm', '/a+x', '-exec', 'ldd', '{}', ';']
-    jvm_find_std_out = _run_bash_command(find_command)
+    jvm_find_std_out = _run_popen_command(find_command)
     shared_objects = _std_out_to_shared_objects({}, jvm_find_std_out)
+    _copy_files_to_build_output_directory(shared_objects)
     return shared_objects
 
 
+def _copy_files_to_build_output_directory(shared_objects):
+    for file_name in shared_objects.values():
+        file_directory = "/".join(file_name.split("/")[:-1])
+        build_output_dir = "build-output{0}".format(file_directory)
+        _run_popen_command(["mkdir", "-p", build_output_dir])
+        _run_popen_command(["cp", file_name, "{0}/".format(build_output_dir)])
+
+
 def _ldd_of_shared_object(shared_objects, executable):
-    std_out = _run_bash_command(["ldd", str(executable).strip()])
+    std_out = _run_popen_command(["ldd", str(executable).strip()])
     return _std_out_to_shared_objects(shared_objects, std_out)
 
 
@@ -37,7 +46,7 @@ def _find_dependencies(shared_objects, std_out_line):
     return shared_objects
 
 
-def _run_bash_command(command):
+def _run_popen_command(command):
     popen = subprocess.Popen(command, stdout=subprocess.PIPE)
     std_out, std_err = popen.communicate("")
     return std_out

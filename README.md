@@ -19,6 +19,6 @@ are decreased.
 
 # TODOS
 
-[ ]: copy files found by command above into `build-output/` to be used by a subsequent Docker image
-[ ]: test out that this actually works for a Java application
-[ ]: create a script that does the build process so a single command needs to be run
+- [ ]: copy files found by command above into `build-output/` to be used by a subsequent Docker image
+- [ ]: test out that this actually works for a Java application
+- [ ]: create a script that does the build process so a single command needs to be run
