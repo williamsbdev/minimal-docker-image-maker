@@ -6,11 +6,14 @@ def main(directory):
     find_command = ['find', directory, '-type', 'f', '-perm', '/a+x', '-exec', 'ldd', '{}', ';']
     jvm_find_std_out = _run_popen_command(find_command)
     shared_objects = _std_out_to_shared_objects({}, jvm_find_std_out)
-    _copy_files_to_build_output_directory(shared_objects)
+    _copy_files_to_build_output_directory(directory, shared_objects)
     return shared_objects
 
 
-def _copy_files_to_build_output_directory(shared_objects):
+def _copy_files_to_build_output_directory(directory, shared_objects):
+    build_output_dir = "build-output{0}".format(directory)
+    _run_popen_command(["mkdir", "-p", build_output_dir])
+    _run_popen_command(["cp", "-RL", "{0}/*".format(directory), build_output_dir + "/"])
     for file_name in shared_objects.values():
         file_directory = "/".join(file_name.split("/")[:-1])
         build_output_dir = "build-output{0}".format(file_directory)

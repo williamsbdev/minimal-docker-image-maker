@@ -39,6 +39,8 @@ ldd /lib64/libSM.so.6
 ldd /lib64/libICE.so.6
 ldd /lib64/libuuid.so.1
 ldd /lib64/libpng15.so.15
+mkdir -p build-output/usr/lib/jvm
+cp -RL /usr/lib/jvm/* build-output/usr/lib/jvm/
 mkdir -p build-output/lib64
 cp /lib64/libnssutil3.so build-output/lib64/
 mkdir -p build-output/lib64
