@@ -13,7 +13,7 @@ def main(directory):
 def _copy_files_to_build_output_directory(directory, shared_objects):
     build_output_dir = "build-output{0}".format(directory)
     _run_popen_command(["mkdir", "-p", build_output_dir])
-    _run_popen_command(["cp", "-RL", "{0}/*".format(directory), build_output_dir + "/"])
+    _run_popen_command(["yes", "|", "cp", "-aL", "{0}/.".format(directory), build_output_dir + "/"])
     for file_name in shared_objects.values():
         file_directory = "/".join(file_name.split("/")[:-1])
         build_output_dir = "build-output{0}".format(file_directory)

@@ -5,20 +5,26 @@ application or process in a Docker container. This will lead to smaller Docker
 images so that deploys are faster, disk usage is minimized, and attack surfaces
 are decreased.
 
-## To get started
+## Building a minimal Java Spring Boot application image with the OpenJDK installed on Centos 7
 
     docker build -t centos:java1.8.0_121 .
 
     docker run -v "${PWD}:/data" -w /data centos:java1.8.0_121 python create_minimal_image.py /usr/lib/jvm
+
+    docker build -t minimal-java -f Dockerfile-minimal-java .
+
+    docker build -t minimal-spring-boot -f Dockerfile-spring-boot .
+
+or
+
+    ./build.sh
+
+Then to run Spring Boot application:
+
+    docker run -p 8080:8080 minimal-spring-boot
 
 # Running tests
 
     # create virtualenv if you'd like
     pip install -r requirements.txt
     pytest
-
-# TODOS
-
-- [ ]: copy files found by command above into `build-output/` to be used by a subsequent Docker image
-- [ ]: test out that this actually works for a Java application
-- [ ]: create a script that does the build process so a single command needs to be run
