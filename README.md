@@ -9,7 +9,7 @@ are decreased.
 
     docker build -t centos:java1.8.0_121 .
 
-    docker run -v "${PWD}:/data" -w /data centos:java1.8.0_121 python create_minimal_image.py
+    docker run -v "${PWD}:/data" -w /data centos:java1.8.0_121 python create_minimal_image.py /usr/lib/jvm
 
 # Running tests
 
