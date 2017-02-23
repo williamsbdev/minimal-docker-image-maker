@@ -1,6 +1,8 @@
 import subprocess
 import sys
 
+BUILD_DIR = 'build-output'
+
 
 def main(directory):
     find_command = ['find', directory, '-type', 'f', '-perm', '/a+x', '-exec', 'ldd', '{}', ';']
@@ -11,14 +13,22 @@ def main(directory):
 
 
 def _copy_files_to_build_output_directory(directory, shared_objects):
-    build_output_dir = "build-output{0}".format(directory)
+    build_output_dir = "{0}{1}".format(BUILD_DIR, directory)
     _run_popen_command(["mkdir", "-p", build_output_dir])
-    _run_popen_command(["yes", "|", "cp", "-aL", "{0}/.".format(directory), build_output_dir + "/"])
+    _run_popen_command(["cp", "-rL", "{0}/.".format(directory), build_output_dir + "/"])
+    output_dirs = set(build_output_dir)
     for file_name in shared_objects.values():
-        file_directory = "/".join(file_name.split("/")[:-1])
-        build_output_dir = "build-output{0}".format(file_directory)
+        _mkdir_and_copy_file(file_name, output_dirs)
+
+
+def _mkdir_and_copy_file(file_name, output_dirs):
+    file_directory = "/".join(file_name.split("/")[:-1])
+    build_output_dir = "{0}{1}/".format(BUILD_DIR, file_directory)
+    if build_output_dir not in output_dirs:
         _run_popen_command(["mkdir", "-p", build_output_dir])
-        _run_popen_command(["cp", file_name, "{0}/".format(build_output_dir)])
+        output_dirs.add(build_output_dir)
+    _run_popen_command(["cp", file_name, build_output_dir])
+    return output_dirs
 
 
 def _ldd_of_shared_object(shared_objects, executable):
@@ -40,7 +50,7 @@ def _find_dependencies(shared_objects, std_out_line):
     shared_object_details = std_out_line.split(" ")
     shared_object_name = shared_object_details[0].strip()
     shared_object_location = shared_object_details[2] if len(shared_object_details) > 3 else shared_object_name
-    if shared_object_name not in shared_objects.keys() and shared_object_location not in ['', 'not', 'statically']:
+    if shared_objects.get(shared_object_name, None) is None and shared_object_location not in ['', 'not', 'statically']:
         shared_objects[shared_object_name] = shared_object_location
         _ldd_of_shared_object(
                 shared_objects,
