@@ -16,4 +16,6 @@ python:
 
 install: pip install --user -r requirements.txt
 
-script: pytest
+script:
+  - which pytest
+  - eval $(which pytest)
