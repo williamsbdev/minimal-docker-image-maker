@@ -14,14 +14,14 @@ class CreateMinimalImageTest(TestCase):
         create_minimal_image._run_popen_command = stubbed_run_popen_command
 
     def test_main_will_correctly_return_shared_objects_and_locations(self):
-        main('/usr/lib/jvm')
+        main("/usr/lib/jvm")
         self.assertEquals(POPEN_COMMAND_LIST, get_expected_popen_comands())
 
 
 def stubbed_run_popen_command(command):
     POPEN_COMMAND_LIST.append(" ".join(command))
     try:
-        with open("tests/fixtures/{0}.txt".format("_".join(command).replace("/", "_")), 'r') as f:
+        with open("tests/fixtures/{0}.txt".format("_".join(command).replace("/", "_")), "r") as f:
             std_out = f.read()
         return std_out
     except:
