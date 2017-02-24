@@ -1,6 +1,6 @@
 # A project for creating minimal Docker images
 
-[![Build Status][]](https://travis-ci.org/williamsbdev/minimal-docker-image-maker)
+[![Build Status](https://travis-ci.org/williamsbdev/minimal-docker-image-maker.png)](https://travis-ci.org/williamsbdev/minimal-docker-image-maker)
 
 The concept of this project is to find all the libraries for running an
 application or process in a Docker container. This will lead to smaller Docker
