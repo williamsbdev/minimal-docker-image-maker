@@ -14,4 +14,6 @@ python:
   - "3.7-dev" # 3.7 development branch
   - "nightly" # currently points to 3.7-dev
 
+install: pip install --user -r requirements.txt
+
 script: pytest
