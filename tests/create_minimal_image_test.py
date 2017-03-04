@@ -14,13 +14,8 @@ class CreateMinimalImageTest(TestCase):
         create_minimal_image._run_popen_command = stubbed_run_popen_command
 
     def test_main_will_correctly_return_shared_objects_and_locations(self):
-        self.maxDiff = None
         main("/usr/lib/jvm")
-        expected_commands = get_expected_popen_comands()
-        for index, command in enumerate(POPEN_COMMAND_LIST):
-            expected_command = expected_commands[index]
-            failure_message = "failed on index: {0} with commands {1} != {2}".format(index, command, expected_command)
-            self.assertEquals(command, expected_command, failure_message)
+        self.assertEquals(POPEN_COMMAND_LIST, get_expected_popen_comands())
 
 
 def stubbed_run_popen_command(command):
