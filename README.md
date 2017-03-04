@@ -31,4 +31,4 @@ Then to run Spring Boot application:
 
     # create virtualenv if you'd like
     pip install -r requirements.txt
-    pytest
+    py.test

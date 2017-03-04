@@ -1,6 +1,6 @@
 ---
 
-sudo: required
+sudo: false
 
 language: python
 
@@ -19,4 +19,4 @@ python:
 
 install: pip install -r requirements.txt
 
-script: pytest
+script: py.test
