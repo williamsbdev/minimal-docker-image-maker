@@ -9,7 +9,7 @@ are decreased.
 
 ## Building a minimal Java Spring Boot application image with the OpenJDK installed on Centos 7
 
-    docker build -t centos:java1.8.0_121 .
+    docker build -t centos:java1.8.0_121 -f Dockerfile-java .
 
     rm -rf build-output
 
@@ -21,7 +21,7 @@ are decreased.
 
 or
 
-    ./build.sh
+    ./build-java.sh
 
 Then to run Spring Boot application:
 
