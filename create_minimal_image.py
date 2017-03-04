@@ -17,7 +17,7 @@ def _copy_files_to_build_output_directory(directory, shared_objects):
     _run_popen_command(["mkdir", "-p", build_output_dir])
     _run_popen_command(["cp", "-rL", "{0}/.".format(directory), build_output_dir + "/"])
     output_dirs = set(build_output_dir)
-    for file_name in shared_objects.values():
+    for file_name in sorted(shared_objects.values()):
         _mkdir_and_copy_file(file_name, output_dirs)
 
 
