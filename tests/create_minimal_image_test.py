@@ -18,7 +18,9 @@ class CreateMinimalImageTest(TestCase):
         main("/usr/lib/jvm")
         expected_commands = get_expected_popen_comands()
         for index, command in enumerate(POPEN_COMMAND_LIST):
-            self.assertEquals(command, expected_commands[index])
+            expected_command = expected_commands[index]
+            failure_message = "failed on index: {0} with commands {1} != {2}".format(index, command, expected_command)
+            self.assertEquals(command, expected_command, failure_message)
 
 
 def stubbed_run_popen_command(command):
