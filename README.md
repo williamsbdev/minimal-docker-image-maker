@@ -13,7 +13,7 @@ are decreased.
 
     rm -rf build-output
 
-    docker run --rm -v "${PWD}:/data" -w /data centos:java1.8.0_121 python create_minimal_image.py /usr/lib/jvm
+    docker run --rm -v "${PWD}:/data" -w /data centos:java1.8.0_121 python create_minimal_image.py /usr/lib/jvm/jre
 
     docker build -t minimal-java -f Dockerfile-minimal-java .
 
