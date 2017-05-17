@@ -1,3 +1,4 @@
+import re
 import subprocess
 import sys
 
@@ -6,8 +7,8 @@ BUILD_DIR = "build-output"
 
 def main(directory):
     find_command = ["find", directory, "-type", "f", "-perm", "/a+x", "-exec", "ldd", "{}", ";"]
-    jvm_find_std_out = _run_popen_command(find_command)
-    shared_objects = _std_out_to_shared_objects({}, jvm_find_std_out)
+    find_std_out = _run_popen_command(find_command)
+    shared_objects = _std_out_to_shared_objects({}, find_std_out)
     _copy_files_to_build_output_directory(directory, shared_objects)
     return shared_objects
 
@@ -47,16 +48,27 @@ def _convert_std_out_to_list(std_out):
 
 
 def _find_dependencies(shared_objects, std_out_line):
-    shared_object_details = std_out_line.split(" ")
-    shared_object_name = shared_object_details[0].strip()
-    shared_object_location = shared_object_details[2] if len(shared_object_details) > 3 else shared_object_name
-    if shared_objects.get(shared_object_name, None) is None and shared_object_location not in ["", "not", "statically"]:
+    shared_object_name, shared_object_location = _get_shared_object_name_and_location(std_out_line)
+    if shared_objects.get(shared_object_name, None) is None and shared_object_location:
         shared_objects[shared_object_name] = shared_object_location
         _ldd_of_shared_object(
                 shared_objects,
                 shared_objects[shared_object_name]
         )
     return shared_objects
+
+
+def _get_shared_object_name_and_location(std_out_line):
+    shared_object_name = None
+    shared_object_location = None
+    shared_object_details = re.match("(.*)\s=>\s(.*)\s\(0x.*\)|(.*)\s\(0x.*\)", std_out_line)
+    if shared_object_details:
+        shared_object_name = shared_object_details.groups()[0]
+        shared_object_location = shared_object_details.groups()[1]
+        if shared_object_name is None:
+            shared_object_name = shared_object_details.groups()[2]
+            shared_object_location = shared_object_details.groups()[2]
+    return (shared_object_name, shared_object_location)
 
 
 def _run_popen_command(command):
