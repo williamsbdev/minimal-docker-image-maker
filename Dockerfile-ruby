@@ -1,0 +1,16 @@
+FROM centos:7
+RUN yum install -y which gcc-c++ patch readline readline-devel zlib zlib-devel \
+                   libyaml-devel libffi-devel openssl-devel make bzip2 \
+                   autoconf automake libtool bison iconv-devel sqlite-devel \
+                   && yum clean all
+RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import -
+RUN curl -L get.rvm.io | bash -s stable
+RUN source /etc/profile.d/rvm.sh
+RUN /usr/local/rvm/bin/rvm reload
+RUN /usr/local/rvm/bin/rvm install 2.3.3
+ENV PATH=/usr/local/rvm/bin:/usr/local/rvm/rubies/ruby-2.3.3/bin:$PATH
+RUN /usr/local/rvm/rubies/ruby-2.3.3/bin/gem install rails bundler
+COPY examples/rails-app /data/rails-app
+RUN cd /data/rails-app; \
+    /usr/local/rvm/rubies/ruby-2.3.3/bin/bundle install; \
+    /usr/local/rvm/rubies/ruby-2.3.3/bin/rake assets:precompile

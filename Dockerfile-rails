@@ -1,0 +1,5 @@
+FROM minimal-ruby
+ADD /examples/tmp /tmp
+COPY examples/rails-app /app/rails-app
+WORKDIR /apps/rails-app
+CMD ["/usr/local/rvm/rubies/ruby-2.3.3/bin/ruby", "rails", "s"]
