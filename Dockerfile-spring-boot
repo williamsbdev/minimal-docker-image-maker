@@ -1,4 +1,12 @@
-FROM minimal-java
-ADD /examples/tmp /tmp
+FROM centos:7 as builder
+RUN yum install -y which java && yum clean all
+ADD create_minimal_image.py /data/
+WORKDIR /data
+RUN python create_minimal_image.py /usr/lib/jvm/jre
+
+FROM scratch
+COPY --from=builder /data/build-output/ /
+ADD examples/tmp /tmp
 COPY examples/java-app/spring-boot-web-1.0.jar /app/spring-boot-web-1.0.jar
+WORKDIR /
 CMD ["/usr/lib/jvm/jre/bin/java", "-jar", "/app/spring-boot-web-1.0.jar"]
