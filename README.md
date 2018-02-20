@@ -5,23 +5,13 @@
 The concept of this project is to find all the libraries for running an
 application or process in a Docker container. This will lead to smaller Docker
 images so that deploys are faster, disk usage is minimized, and attack surfaces
-are decreased.
+are decreased. A version of Docker that supports multi stage Dockerfiles is
+required.
 
 ## Building a minimal Java Spring Boot application image with the OpenJDK installed on Centos 7
 
-    docker build -t centos:java1.8.0_121 -f Dockerfile-java .
-
-    rm -rf build-output
-
-    docker run --rm -v "${PWD}:/data" -w /data centos:java1.8.0_121 python create_minimal_image.py /usr/lib/jvm/jre
-
-    docker build -t minimal-java -f Dockerfile-minimal-java .
-
     docker build -t minimal-spring-boot -f Dockerfile-spring-boot .
 
-or
-
-    ./build-java.sh
 
 Then to run Spring Boot application:
 
