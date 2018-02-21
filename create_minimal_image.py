@@ -3,10 +3,11 @@ import subprocess
 import sys
 
 BUILD_DIR = "build-output"
+JRE_DIR = "jre"
 
 
 def main(directory):
-    find_command = ["find", directory, "-type", "f", "-perm", "/a+x", "-exec", "ldd", "{}", ";"]
+    find_command = ["find", directory, "-type", "f", "(", "-perm", "/a+x", "-o", "-name", "*.so", ")", "-exec", "ldd", "{}", ";"]
     find_std_out = _run_popen_command(find_command)
     shared_objects = _std_out_to_shared_objects({}, find_std_out)
     _copy_files_to_build_output_directory(directory, shared_objects)
@@ -14,16 +15,16 @@ def main(directory):
 
 
 def _copy_files_to_build_output_directory(directory, shared_objects):
-    build_output_dir = "{0}{1}".format(BUILD_DIR, directory)
+    build_output_dir = "{0}{1}".format(BUILD_DIR, '/jre')
     _run_popen_command(["mkdir", "-p", build_output_dir])
     _run_popen_command(["cp", "-rL", "{0}/.".format(directory), build_output_dir + "/"])
     output_dirs = set(build_output_dir)
     for file_name in sorted(shared_objects.values()):
-        _mkdir_and_copy_file(file_name, output_dirs)
+        _mkdir_and_copy_file(directory, file_name, output_dirs)
 
 
-def _mkdir_and_copy_file(file_name, output_dirs):
-    file_directory = "/".join(file_name.split("/")[:-1])
+def _mkdir_and_copy_file(directory, file_name, output_dirs):
+    file_directory = "/".join(file_name.split("/")[:-1]).replace(directory, "/" + JRE_DIR + "/")
     build_output_dir = "{0}{1}/".format(BUILD_DIR, file_directory)
     if build_output_dir not in output_dirs:
         _run_popen_command(["mkdir", "-p", build_output_dir])

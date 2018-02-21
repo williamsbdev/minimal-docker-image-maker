@@ -1,4 +1,0 @@
-FROM minimal-java
-ADD /examples/tmp /tmp
-COPY examples/java-app/spring-boot-web-1.0.jar /app/spring-boot-web-1.0.jar
-CMD ["/usr/lib/jvm/jre/bin/java", "-jar", "/app/spring-boot-web-1.0.jar"]
